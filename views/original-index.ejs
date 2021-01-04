@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script defer src="/socket.io/socket.io.js"></script> 
+ <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> 
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <head>
+    <div class="navbar">
+      <a href="#Pario">Pario</a>
+      <a href="#Posts">Posts</a>
+      <div class="dropdown">
+        <button class="dropbtn">Profile
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Edit Profile</a>
+          <a href="#">Following</a>
+          <a href="#">Messages</a>
+        </div>
+      </div>
+    </div>
+  </head>
+
+  <body>
+    <div class="make-post"><div class="post-box">
+        <div class="post-box-title">
+          <h2>What's on your mind?</h2>
+        </div>
+        <div class="text-area post-editor">
+          <textarea style="width: 482px; height: 60px;"
+                    class="post-anywhere-box-editor" id="textareaID"></textarea>
+        </div>
+        <div class="post-button-container">
+          <a href="#" style="float: left;" class="post-button button disabled" id="PostButton" onclick="postFormFilled()">Post</a>
+        </div>
+      </div></div>
+      <br></br>
+    <hr class="solid">
+    
+      <div class="Loaded-Post">
+        <div class="Profile-Picture-Username">
+        <table>
+          <tr>
+            <td>
+              <div class="post-button-container" style="text-align: center; display:inline-block;">
+              
+                <div>
+                  <p class="username" id="user1"> Username </p>
+                </div>
+                <div style="text-align: left;">
+                  <img class="pro-pic" src="css/photos/Profiles/placeholder_1.png" alt="placeholder_1">
+                </div>
+                <div>
+                    <button class="follow-button">Follow</button>
+                  </div>
+                <div style="text-align: center">
+                  <p class="time-date-line" id="time-date">XX/XX/XXXX at XX:XX XM</p>
+                </div>
+                   
+              </div>
+               
+                <div class="post-text" style="overflow: hidden; float:right; padding-left: 60px; padding-top: 30px;"> 
+                  <p id="post1"></p> 
+                  <button onclick="redirect('0')">Comments</button>
+                  <button>👍</button>
+                </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div> 
+    <hr class="solid">
+      <div class="Loaded-Post">
+        <div class="Profile-Picture-Username">
+        <table>
+          <tr>
+            <td>
+              <div class="post-button-container" style="text-align: center; display:inline-block;">
+              
+                <div>
+                  <p class="username" id="user2"> Username </p>
+                </div>
+                <div>
+                  <img class="pro-pic" src="css/photos/Profiles/placeholder_1.png" alt="placeholder_1">
+                </div>
+                 <div>
+                    <button class="follow-button">Follow</button>
+                  </div>
+                <div style="text-align: center">
+                  <p class="time-date-line" id="time-date2">XX/XX/XXXX at XX:XX XM</p>
+                </div>
+              </div>
+               
+                <div class="post-text" style="overflow: hidden; float:right; padding-left: 60px; padding-top: 30px;"> 
+                  <p id="post2"></p> 
+                  <button onclick="redirect('1')">Comments</button>
+                  <button>👍</button>
+                </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div> 
+    <hr class="solid">
+    
+      <div class="Loaded-Post">
+        <div class="Profile-Picture-Username">
+        <table>
+          <tr>
+            <td>
+              <div class="post-button-container" style="text-align: center; display:inline-block;">
+              
+                <div>
+                  <p class="username" id="user3"> Username </p>
+                </div>
+                <div>
+                  <img class="pro-pic" src="css/photos/Profiles/placeholder_1.png" alt="placeholder_1">
+                </div>
+                 <div>
+                    <button class="follow-button">Follow</button>
+                  </div>
+                <div style="text-align: center">
+                  <p class="time-date-line" id="time-date3">XX/XX/XXXX at XX:XX XM</p>
+                </div>
+              </div>
+
+                <div class="post-text" style="overflow: hidden; float:right; padding-left: 60px; padding-top: 30px;"> 
+                  <p id="post3"></p> 
+                  <button onclick="redirect('2')">Comments</button>
+                  <button>👍</button>
+                </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div> 
+    
+    <hr class="solid">
+
+      <div class="Loaded-Post">
+        <div class="Profile-Picture-Username">
+        <table>
+          <tr>
+            <td>
+              <div class="post-button-container" style="text-align: center; display:inline-block;">
+              
+                <div>
+                  <p class="username" id="user4"> Username </p>
+                </div>
+                <div>
+                  <img class="pro-pic" src="css/photos/Profiles/placeholder_1.png" alt="placeholder_1">
+                </div>
+                 <div>
+                    <button class="follow-button">Follow</button>
+                  </div>
+                <div style="text-align: center">
+                  <p class="time-date-line" id="time-date4">XX/XX/XXXX at XX:XX XM</p>
+                </div>
+              </div>
+               
+                <div class="post-text" style="overflow: hidden; float:right; padding-left: 60px; padding-top: 30px;"> 
+                  <p id="post4"></p>
+                  <button onclick="redirect('3')">Comments</button>
+                  <button>👍</button>
+                </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div> 
+    <hr class="solid">
+      <div class="Loaded-Post">
+        <div class="Profile-Picture-Username">
+        <table>
+          <tr>
+            <td>
+              <div class="post-button-container" style="text-align: center; display:inline-block;">
+              
+                <div>
+                  <p class="username" id="user5"> Username </p>
+                </div>
+                <div>
+                  <img class="pro-pic" src="css/photos/Profiles/placeholder_1.png" alt="placeholder_1">
+                </div>
+                 <div>
+                    <button class="follow-button">Follow</button>
+                  </div>
+                <div style="text-align: center">
+                  <p class="time-date-line" id="time-date5">XX/XX/XXXX at XX:XX XM</p>
+                </div>
+              </div>
+               
+                <div class="post-text" style="overflow: hidden; float:right; padding-left: 60px; padding-top: 30px;"> 
+                  <p id="post5"></p> 
+                  <button onclick="redirect('4')">Comments</button>
+                  <button>👍</button>
+
+                </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div> 
+    <hr class="solid">
+      <div class="Loaded-Post">
+        <div class="Profile-Picture-Username">
+        <table>
+          <tr>
+            <td>
+              <div class="post-button-container" style="text-align: center; display:inline-block;">
+              
+                <div>
+                  <p class="username" id="user6"> Username </p>
+                </div>
+                <div>
+                  <img class="pro-pic" src="css/photos/Profiles/placeholder_1.png" alt="placeholder_1">
+                </div>
+                 <div>
+                    <button class="follow-button">Follow</button>
+                  </div>
+                <div style="text-align: center">
+                  <p class="time-date-line" id="time-date6">XX/XX/XXXX at XX:XX XM</p>
+                </div>
+              </div>
+               
+                <div class="post-text" style="overflow: hidden; float:right; padding-left: 60px; padding-top: 30px;"> 
+                  <p id="post6"></p> 
+                  <button onclick="redirect('5')">Comments</button>
+                  <button>👍</button>
+                </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <hr class="solid">
+    <br></br>
+
+   <div style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        "> 
+      <!-- Previous button to the left -->
+      <a class="button button1" onclick="previousPage()">Previous</a>
+  
+      <!-- Next button to the right -->
+      <a class="button button2" onclick="nextPage()" >Next</a>
+    </div>
+  </body>
+
+  <script defer src="index.js"></script>
+</html>

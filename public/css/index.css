@@ -1,0 +1,233 @@
+
+
+body {
+  font-family: Arial;
+  margin: 0px;
+  padding: 0px;
+  color: white; 
+  background: rgb(33, 45, 53);
+}
+
+
+.body {
+}
+
+.body h1 {
+  font-size: 24px;
+  font-family: Arial;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-left: 60px;
+}
+
+hr.solid {
+  border-top: 3px solid #bbb;
+}
+
+/* Navbar container */
+.navbar {
+  overflow: hidden;
+  font-family: Arial; 
+  margin-top: 0px; 
+  padding: 1%; 
+  text-align: center;
+  background: rgb(48, 66, 85);
+  color: white;
+  font-size: 30px;
+}
+
+/* Links inside the navbar */
+.navbar a {
+  float: left;
+  font-size: 30px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+
+/* The dropdown container */
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+  font-size: 30px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit; /* Important for vertical align on mobile phones */
+  margin: 0; /* Important for vertical align on mobile phones */
+}
+
+/* Add a red background color to navbar links on hover */
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: rgb(33, 45, 53);
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  margin-right: 60px;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.make-post {
+  font-family: Arial;
+  font-size: 16px;
+  padding-top: 40px; 
+  padding-left: 60px;
+  padding-bottom: 40px;
+}
+
+#PostButton {
+  margin-top: 15px; 
+  text-align: center;
+  padding: 15px 32px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  border-radius: 12px;
+  padding: 6px;
+  margin-left: 440px;
+  background-color: #008CBA;
+}
+
+.Loaded-Post {
+  font-family: Arial;
+  font-size: 20px;
+}
+
+.post-text {
+  float: right; 
+  margin-top: 20%;
+  margin-left: 120px;
+}
+
+.post-button-container {
+  text-align: center;
+}
+
+.username {
+  margin-left: 60px;  
+  margin-top: 30px;
+}
+
+.pro-pic {
+  margin-bottom: 15px; 
+  margin-left: 60px;
+  width: 200px;
+  height: 200px;
+}
+
+
+.follow-button {
+  background-color: rgb(49, 127, 146);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  border-radius: 15px;
+  text-decoratikon: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  margin-bottom: 30px; 
+  margin-left: 60px;
+}
+
+.button {
+  margin-top: 45px;
+  border: none;
+  padding: 16px 32px;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.Profile-Picture-Username {
+  
+}
+
+.Profile-Picture-Username p {
+  font-size: 32;
+}
+
+.button1 {
+  width: 150px; 
+  margin-right: 15px;
+  margin-bottom: 60px;
+  background-color: white; 
+  color: black; 
+  border: 2px solid #008CBA;
+}
+
+.button1:hover {
+  background-color: #008CBA; 
+  color: white;
+}
+
+.button2 {
+  margin-left: 15px;
+  width: 150px; 
+  background-color: white; 
+  margin-bottom: 60px;
+  color: black; 
+  border: 2px solid #008CBA;
+}
+
+.post {
+  float:left;
+  padding-left: 45%;
+}
+
+.button2:hover {
+  background-color: #008CBA;
+  color: white;
+}
+
+.time-date-line {
+  font-size: 12px; 
+  overflow:hidden; 
+  float: center;
+  margin-left: 50px; 
+  margin-bottom: 30px;
+}
+
+.comment-bubble {
+  width: 30px;
+  height: 20px;
+  float: center;
+  margin-left: 500px;
+  margin-bottom: 30px;
+}

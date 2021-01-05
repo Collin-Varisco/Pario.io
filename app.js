@@ -68,18 +68,107 @@ io.on("connection", (socket) => {
       });
   })
 
-  socket.on("load-posts", () => {
+  socket.on("load-posts", (num) => {
     mongodb.MongoClient.connect('mongodb://localhost', function (err, client) {
       if (err) throw err;
       var db = client.db('Pario');
 
-      db.collection('Posts').find({Post_Content:{"$exists":true, "$ne":""}},{Parent_Comment_ID:""}).toArray(function(err, result){
+      db.collection('Posts').find({Post_Content:{$not: {$eq:""}}, Parent_Comment_ID:{$eq:""}}).sort({$natural: -1}).toArray(function(err, result){
         if(err) throw err;
         io.emit("display-posts", result);
         client.close();
       });
     });
   });
+
+
+  socket.on("load-profile-posts", (user) => {
+    mongodb.MongoClient.connect('mongodb://localhost', function (err, client) {
+      if (err) throw err;
+      var db = client.db('Pario');
+
+      db.collection('Posts').find({Post_Content:{$not: {$eq:""}}, Author:{$eq:user}}).sort({$natural: -1}).toArray(function(err, result){
+        if(err) throw err;
+        io.emit("display-profile-posts", result);
+        client.close();
+      });
+    });
+  });
+
+  // Retrieves bio of a given user
+  socket.on("get-bio", (user) => {
+      mongodb.MongoClient.connect('mongodb://localhost', function (err, client) {
+        if (err) throw err;
+        var db = client.db('Pario');
+
+        db.collection('users').findOne({name:{$eq:user}}, function(err, result){
+          if(err) throw err;
+          if(result != null){
+            io.emit("receive-bio", result.bio); 
+          }
+          client.close();
+        });
+      });
+  });
+
+  // Check to see if use is following a given profile
+  socket.on("check-following", (user, selectedProfile) => {
+      mongodb.MongoClient.connect('mongodb://localhost', function (err, client) {
+        if (err) throw err;
+        var db = client.db('Pario');
+
+        db.collection('users').findOne({name:{$eq:user}}, function(err, result){
+          if(err) throw err;
+          var following = false; 
+          if(result != null){
+            for(var i = 0; i < result.following.length; i++){
+              if(result.following[i] == selectedProfile){
+                following = true;
+                break;
+              }
+            }
+            io.emit("following-boolean", following); 
+          }
+          client.close();
+        });
+      });
+  });
+
+  // Follow or unfollow a profile
+  socket.on("follow-unfollow", (followBool, user, selectedProfile) => {
+      mongodb.MongoClient.connect('mongodb://localhost', function (err, client) {
+        if (err) throw err;
+        var db = client.db('Pario');
+
+        // FOLLOW
+        if(followBool == false){
+          // Find user profile
+          const query = { "name": user };
+
+          const update = {
+            "$addToSet": {
+              following: selectedProfile
+            }
+          };
+
+          const options = {returnNewDocument: false };
+
+          db.collection('users').findOneAndUpdate(query, update, options).then(updatedDocument => {
+            if(updatedDocument){
+              console.log("Success");
+              io.emit("receive-follow-unfollow", true);
+            } else {
+              console.log("No match.");
+              io.emit("receive-follow-unfollow", false);
+            }
+            client.close();
+          }).catch(err => console.error('failed to find and update document: ${err}'));
+        }
+      });
+
+      // ***TODO*** UNFOLLOW
+  });
+
   /* formArray
   [0] = textArea value
   [1] = username
@@ -181,13 +270,13 @@ app.get('/index', function(req, res){
   res.render("index.ejs");
 });
 
-app.get('/comments', function(req, res){
-  res.render("comments.ejs");
+app.get('/profile', function(req, res){
+  res.render("profile.ejs");
 });
 
 
-app.get('/:comments', function(req, res){
-  res.render("comments.ejs");
+app.get('/:profile', function(req, res){
+  res.render("profile.ejs");
 });
 
 

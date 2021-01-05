@@ -39,6 +39,7 @@ a {
 }
 
 button {
+    cursor: pointer;
     background-color: rgb(46, 154, 194);
     border-radius: 5px;
     border: none;
@@ -83,6 +84,7 @@ button {
 }
 
 .tweet > img {
+    cursor: pointer;
     display: block;
     float: left;
     width: 60px;
@@ -99,6 +101,8 @@ button {
 .tweet .title {
     font-weight: 700;
     color: rgb(51, 51, 51);
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .tweet .message {
@@ -108,6 +112,37 @@ button {
 /* Structure */
 body {
     background: rgb(33, 45, 53) repeat-x;
+}
+
+.column-container {
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.column-container-bottom-text {
+    text-align: center;
+    color: black;
+    text-decoration-line: underline;
+    cursor: pointer;
+}
+
+.container {
+    border: 3px solid black;
+    padding: 20px 40px 40px;
+    display: flex;
+}
+
+.__image {
+    width: 120px;
+   /* object-fit: contain;
+    margin: 20px 30px 0 0;
+    align-self: flex-start;*/
+}
+
+.__text {
+    flex: 1 1 auto;
+    margin-left: 30px;
 }
 
 main {

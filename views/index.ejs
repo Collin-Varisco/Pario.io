@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Alexander Persky Milestone 4 - Twitter</title>
+    <title>Pario.io</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -89,10 +89,10 @@
     <script id="template-tweet" type="text/x-handlebars-template">
 
         <div class="tweet" id="{{_id}}">
-            <img src="images/place.png" style="width: 60px; height: 60px;">
+            <img src="images/place.png" onclick='getProfile(this);' id="{{Author}}" style="width: 60px; height: 60px;">
 
             <div class="body">
-                <div class="title">{{ Author }}</div>
+                <div class="title" onclick='getProfile(this)' id="{{Author}}">{{ Author }}</div>
                 <div class="message">{{ Post_Content }}</div>
             </div>
         </div>

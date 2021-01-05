@@ -1,16 +1,61 @@
+
+var userEx = {
+    handle : "Crisco",
+    img : "",
+    _id : "23"
+};
+
+// URL NAVIGATING -------------------------------------------------------------|
+function getProfile(pro){
+    var clickedProfile  = pro.id;
+    var URL = ""; 
+    if(location.search.substring(1) == ""){
+        URL = "profile.ejs" + "?" + "profiles" + "&" + userEx.handle + "&" + clickedProfile;
+    } else {
+        URL = "profile.ejs" + "?" + "profiles" + "&" + getUserName() + "&" + clickedProfile;
+    }
+    location.href=URL;
+}
+
+function getUserName(){
+    var name = location.search.substring(1).split("&");
+    return name[1];
+}
+// URL NAVIGATING -------------------------------------------------------------|
+
+
+var postNumber = 0;
 $( function() {
     // Initialize socket.io
     var socket = io();
 
+    $(document).ready(function() { $('img').on('click', function() { alert(this.id); });});
+
+
    // var source = $("#template-tweet").html(); 
    // var template = Handlebars.compile(source);
 
-    socket.emit("load-posts");
+    socket.emit("load-posts", postNumber);
     socket.on("display-posts", (result) => {
         for(var i = 0; i < result.length; i++){
             $('.tweets').append(renderThread(result[i]));
         }
     });
+
+
+    // Check to see if scroll bar has reached bottom. Trigger function to load posts.
+    $(window).scroll(function() {
+        if($(window).scrollTop() + $(window).height() == $(document).height()) {
+            alert("Bottom");
+        }
+    });
+
+    $(window).scroll(function() {
+        if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+            postNumber += 4;
+            socket.emit("load-posts");postNumber
+        }
+     });
 
 
 
@@ -43,11 +88,6 @@ $( function() {
         $( this ).parents( 'form' ).addClass( 'expand' );
     } );
 
-    var userEx = {
-        handle : "Crisco",
-        img : "",
-        _id : "23"
-    };
 
     $( '.tweets' ).on( 'click', '.thread > .tweet', function() {
         $( this ).parents( '.thread' ).toggleClass( 'expand' );

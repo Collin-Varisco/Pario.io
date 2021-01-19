@@ -14,7 +14,7 @@ var app = express();
 var server = require("http").Server(app);
 var io = require('socket.io')(server);
 
-//... 
+//...
 
 server.listen(65080);
 
@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
       db.collection('users').find({}).toArray(function(err, result){
         if(err) throw err;
         console.log(result);
-        io.emit("display-users", result); 
+        io.emit("display-users", result);
         client.close();
       })
     });
@@ -60,11 +60,11 @@ io.on("connection", (socket) => {
 
         db.collection('Posts').findOne({_id:ObjectId(id)}, function(err, result){
           if(err) throw err;
-          console.log(result.Post_Content + " | " + result.Author); 
-          io.emit("receive_parent_name", result); 
+          console.log(result.Post_Content + " | " + result.Author);
+          io.emit("receive_parent_name", result);
           client.close();
         });
-         
+
       });
   })
 
@@ -104,7 +104,7 @@ io.on("connection", (socket) => {
         db.collection('users').findOne({name:{$eq:user}}, function(err, result){
           if(err) throw err;
           if(result != null){
-            io.emit("receive-bio", result.bio); 
+            io.emit("receive-bio", result.bio);
           }
           client.close();
         });
@@ -116,58 +116,89 @@ io.on("connection", (socket) => {
       mongodb.MongoClient.connect('mongodb://localhost', function (err, client) {
         if (err) throw err;
         var db = client.db('Pario');
+        db.collection('users').findOne({name:{$eq:selectedProfile}}, function(err, result){
+          if(err) throw err;
+
+	  // The following block of code is for testing.
+	  // It will simply add user profiles to Pario.users database if they don't currently exist there.
+	  if(result == null) {
+	  db.collection('users').insertOne(
+		  {
+			  "name" : selectedProfile,
+			  "bio" : "This is a placeholder bio.",
+			  "following" : [
+
+			  ],
+			  "followers" : [
+			  ]
+		  });
+
+	  }
 
         db.collection('users').findOne({name:{$eq:user}}, function(err, result){
-          if(err) throw err;
-          var following = false; 
-          if(result != null){
-            for(var i = 0; i < result.following.length; i++){
-              if(result.following[i] == selectedProfile){
-                following = true;
-                break;
-              }
-            }
-            io.emit("following-boolean", following); 
-          }
+	  // Search following of user to see if it is following selectedProfile
+          var found = false;
+	  for(var i = 0; i < result.following.length; i++){
+		if(result.following[i] == selectedProfile){
+			io.emit("following-boolean", true);
+			found = true;
+			break;
+		}
+	  }
+	  if(found == false){
+		io.emit("following-boolean", false);
+	  }
+	});
           client.close();
         });
       });
   });
 
   // Follow or unfollow a profile
-  socket.on("follow-unfollow", (followBool, user, selectedProfile) => {
+  socket.on("follow-unfollow", (array) => {
+      var getFollow = false;
+
       mongodb.MongoClient.connect('mongodb://localhost', function (err, client) {
         if (err) throw err;
         var db = client.db('Pario');
 
-        // FOLLOW
-        if(followBool == false){
-          // Find user profile
-          const query = { "name": user };
 
-          const update = {
-            "$addToSet": {
-              following: selectedProfile
-            }
-          };
+      db.collection('users').findOne({name:{$eq:array[1]}}, function(err, result){
+	if(result != null){
+		getFollow = true;
+	}
+      });
+	if(getFollow == false){
+		db.collection('users').update(
+			{ name : array[0] },
+			{ $push: { following: array[1] } }
+		);
+		db.collection('users').update(
+			{ name : array[1] },
+			{ $push: { followers: array[0] } }
+		);
+		io.emit("receive-follow-unfollow", true);
+	}
+	if(getFollow == true){
+		db.collection('users').update(
+			{ name : array[0] },
+			{ $pull: { following: array[1] } }
+		);
 
-          const options = {returnNewDocument: false };
+		db.collection('users').update(
+			{ name : array[1] },
+			{ $pull: { following: array[0] } }
+		);
 
-          db.collection('users').findOneAndUpdate(query, update, options).then(updatedDocument => {
-            if(updatedDocument){
-              console.log("Success");
-              io.emit("receive-follow-unfollow", true);
-            } else {
-              console.log("No match.");
-              io.emit("receive-follow-unfollow", false);
-            }
-            client.close();
-          }).catch(err => console.error('failed to find and update document: ${err}'));
-        }
+		io.emit("receive-follow-unfollow", false);
+	}
+
+        client.close();
+	});
       });
 
       // ***TODO*** UNFOLLOW
-  });
+
 
   /* formArray
   [0] = textArea value
@@ -185,16 +216,16 @@ io.on("connection", (socket) => {
         var db = client.db('Pario');
         db.collection('Posts').insertOne(
             {"Post_Content": formArray[0], "Author": formArray[1], "Month": formArray[2], "Day": formArray[3], "Year": formArray[4], "Hour": formArray[5], "Minute": formArray[6], "AM_PM": formArray[7], "Comments": "", "Users_Comments": "", "Parent_Comment_ID": formArray[8]}
-        ); 
+        );
 
         db.collection('Posts').find({}).toArray(function(err, result){
           if(err) throw err;
-          io.emit("display-posts", result); 
+          io.emit("display-posts", result);
           client.close();
         });
-         
+
       });
-      
+
 
     });
 
@@ -207,10 +238,10 @@ io.on("connection", (socket) => {
 
         db.collection('Posts').findOne({_id:ObjectId(post_ID)}, function(err, result){
           if(err) throw err;
-          console.log(result.Post_Content + " | " + result.Author); 
+          console.log(result.Post_Content + " | " + result.Author);
           client.close();
         });
-         
+
       });
     });
 
@@ -221,7 +252,7 @@ io.on("connection", (socket) => {
         var db = client.db('Pario');
         db.collection('Posts').find({Parent_Comment_ID:parent_ID}).toArray(function(err, result){
           if(err) throw err;
-          io.emit('display-comments', (result)); 
+          io.emit('display-comments', (result));
           client.close();
         });
       });
@@ -247,15 +278,15 @@ io.on("connection", (socket) => {
         var db = client.db('Pario');
         db.collection('Posts').insertOne(
             {"Post_Content": formArray[0], "Author": formArray[1], "Month": formArray[2], "Day": formArray[3], "Year": formArray[4], "Hour": formArray[5], "Minute": formArray[6], "AM_PM": formArray[7], "Comments": "", "Users_Comments": "", "Parent_Comment_ID": formArray[8]}
-        ); 
+        );
 
 
         db.collection('Posts').find({Parent_Comment_ID:formArray[8]}).toArray(function(err, result){
           if(err) throw err;
-          io.emit('display-comments', (result)); 
+          io.emit('display-comments', (result));
           client.close();
         });
-         
+
       });
     })
 });

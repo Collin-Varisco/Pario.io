@@ -1,7 +1,6 @@
 var socket = io();
 
 
-
 function getName(){
     var profileName = location.search.substring(1).split('&');
     return profileName[2];
@@ -22,11 +21,13 @@ function getFollowingBool(){
     }
 }
 
-
+socket.emit("check-following", getUser(), getName());
+/*
 function followUnfollow(){
     // Follow or unfollow profile and change html
     socket.emit("follow-unfollow", (getFollowingBool(), getUser(), getName()));
 }
+*/
 
 socket.on("receive-follow-unfollow", (bool) => {
     if(bool == true){
@@ -41,13 +42,19 @@ socket.on("receive-follow-unfollow", (bool) => {
 
 
 
-
-
+var check = false;
+function followUnfollow(){
+	var array = [ getUser(), getName()];
+	console.log(array[0] + " | " + array[1]);
+    	socket.emit("follow-unfollow", (array));
+	check = true;
+}
 document.getElementById("username").innerHTML = "@"+getName();
 var postNumber = 0;
 $( function() {
     // Initialize socket.io
     var socket = io();
+
 
     // Simply retrieves bio from profile at the end of the URL.
     socket.emit("get-bio", getName());
@@ -55,7 +62,7 @@ $( function() {
         document.getElementById("BIO").innerHTML = bio;
     });
 
-    // loads posts made by a specific profile at the end of the URL 
+    // loads posts made by a specific profile at the end of the URL
     socket.emit("load-profile-posts", getName());
     socket.on("display-profile-posts", (result) => {
         for(var i = 0; i < result.length; i++){
@@ -64,7 +71,6 @@ $( function() {
     });
 
     // Checks to see if user is following profile to change html text if necessary.
-    socket.emit("check-following", (getUser(), getName()));
     socket.on("following-boolean", (bool) => {
         if(bool == true){
             document.getElementById("following").innerHTML = "Following";
@@ -87,7 +93,7 @@ $( function() {
      });
 
 
-    
+
 
     $('.tweets').on('click', '.thread > .tweet', function(){
         var post_ID = $(this)[0].id;
@@ -95,7 +101,7 @@ $( function() {
         socket.emit("get-comments", (post_ID));
         socket.on("display-comments", (result) => {
             //$(this).parent().find('.thread').find('.replies').append(renderTweet(result));
-            
+
             if($(this).parent().find('.replies')[0].id == '0'){
                 for(var i = 0; i < result.length; i++){
                         $(this).parent().find('.replies').append(renderTweet(result[i]));
@@ -106,10 +112,10 @@ $( function() {
 
 
     });
-    
 
 
-    
+
+
     /*--------------------------------------
      #State Management
      --------------------------------------*/
@@ -143,12 +149,12 @@ $( function() {
 
     /**
      * Create New Tweet
-     
+
     function renderTweet( User, message ) {
         var data = {
             handle : User.handle,
             img : User.img,
-            message : message, 
+            message : message,
             ID : User._id
         };
         return tweet( data );
@@ -159,7 +165,7 @@ $( function() {
         var data = {
             handle : User.Author,
             img : "",
-            message : User.Post_Content, 
+            message : User.Post_Content,
             ID : User._id
         };
         return tweet( User );
@@ -224,28 +230,28 @@ $( function() {
             var month = d.getMonth() + 1;
             var day = d.getDate();
             var timeZone = new Date('Dec 29 2020 19:00:00 CST');
-        
+
             // Code to retrieve time
             var hour = timeZone.getHours();
             var minutes = d.getMinutes();
             var am_pm = "";
-            // Convert military time and store hour, minutes, am/pm 
+            // Convert military time and store hour, minutes, am/pm
             if(d.getHours >= 0 && d.getHours <= 12)
             {
             am_pm = "AM";
             } else {
             am_pm = "PM";
-            } 
-    
+            }
+
             //Get parent post ID
             var parentID = $(this).parent().parent().find(".tweet")[0].id;
 
             // Store all the post data in an array.
             var formArray = [message, userEx.handle, month, day, year, hour, minutes, am_pm, parentID];
-            
-            // Send post data to database. 
+
+            // Send post data to database.
             socket.emit("post-button", (formArray));
-        
+
         }
 
         $( 'textarea' ).val( '' );
@@ -260,31 +266,31 @@ $( function() {
         var month = d.getMonth() + 1;
         var day = d.getDate();
         var timeZone = new Date('Dec 29 2020 19:00:00 CST');
-      
+
         // Code to retrieve time
         var hour = timeZone.getHours();
         var minutes = d.getMinutes();
         var am_pm = "";
-        // Convert military time and store hour, minutes, am/pm 
+        // Convert military time and store hour, minutes, am/pm
         if(d.getHours >= 0 && d.getHours <= 12)
         {
           am_pm = "AM";
         } else {
           am_pm = "PM";
-        } 
-   
+        }
+
         //Get parent post ID
         var parentID = $(this).parent().find(".tweet");
 
         // Store all the post data in an array.
         var formArray = [message, userEx.handle, month, day, year, hour, minutes, am_pm, parentID];
-        
-        // Send post data to database. 
+
+        // Send post data to database.
         //socket.emit("post-button", (formArray));
-     
-        
+
+
         // ***TEST***
         console.log(parentID.id);
       }
-    
+
 } );

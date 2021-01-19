@@ -7,7 +7,8 @@ var ejs = require('ejs');
 var mongodb = require("mongodb");
 const { config } = require("process");
 
-
+//TESTING GITKRAKEN
+//Testing merge
 var express = require('express');
 //make sure you keep this order
 var app = express();
@@ -136,19 +137,17 @@ io.on("connection", (socket) => {
 	  }
 
         db.collection('users').findOne({name:{$eq:user}}, function(err, result){
-	  // Search following of user to see if it is following selectedProfile
-          var found = false;
-	  for(var i = 0; i < result.following.length; i++){
-		if(result.following[i] == selectedProfile){
-			io.emit("following-boolean", true);
-			found = true;
-			break;
-		}
-	  }
-	  if(found == false){
-		io.emit("following-boolean", false);
-	  }
-	});
+          if(err) throw err;
+          var following = false; 
+          if(result != null){
+            for(var i = 0; i < result.following.length; i++){
+              if(result.following[i] == selectedProfile){
+                following = true;
+                break;
+              }
+            }
+            io.emit("following-boolean", following); 
+          }
           client.close();
         });
       });

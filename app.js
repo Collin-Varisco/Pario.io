@@ -7,14 +7,14 @@ var ejs = require('ejs');
 var mongodb = require("mongodb");
 const { config } = require("process");
 
-
+//TESTING GITKRAKEN
 var express = require('express');
 //make sure you keep this order
 var app = express();
 var server = require("http").Server(app);
 var io = require('socket.io')(server);
 
-//... 
+//...
 
 server.listen(65080);
 
@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
       db.collection('users').find({}).toArray(function(err, result){
         if(err) throw err;
         console.log(result);
-        io.emit("display-users", result); 
+        io.emit("display-users", result);
         client.close();
       })
     });
@@ -60,11 +60,11 @@ io.on("connection", (socket) => {
 
         db.collection('Posts').findOne({_id:ObjectId(id)}, function(err, result){
           if(err) throw err;
-          console.log(result.Post_Content + " | " + result.Author); 
-          io.emit("receive_parent_name", result); 
+          console.log(result.Post_Content + " | " + result.Author);
+          io.emit("receive_parent_name", result);
           client.close();
         });
-         
+
       });
   })
 
@@ -104,7 +104,7 @@ io.on("connection", (socket) => {
         db.collection('users').findOne({name:{$eq:user}}, function(err, result){
           if(err) throw err;
           if(result != null){
-            io.emit("receive-bio", result.bio); 
+            io.emit("receive-bio", result.bio);
           }
           client.close();
         });
@@ -119,7 +119,7 @@ io.on("connection", (socket) => {
 
         db.collection('users').findOne({name:{$eq:user}}, function(err, result){
           if(err) throw err;
-          var following = false; 
+          var following = false;
           if(result != null){
             for(var i = 0; i < result.following.length; i++){
               if(result.following[i] == selectedProfile){
@@ -127,7 +127,7 @@ io.on("connection", (socket) => {
                 break;
               }
             }
-            io.emit("following-boolean", following); 
+            io.emit("following-boolean", following);
           }
           client.close();
         });
@@ -185,16 +185,16 @@ io.on("connection", (socket) => {
         var db = client.db('Pario');
         db.collection('Posts').insertOne(
             {"Post_Content": formArray[0], "Author": formArray[1], "Month": formArray[2], "Day": formArray[3], "Year": formArray[4], "Hour": formArray[5], "Minute": formArray[6], "AM_PM": formArray[7], "Comments": "", "Users_Comments": "", "Parent_Comment_ID": formArray[8]}
-        ); 
+        );
 
         db.collection('Posts').find({}).toArray(function(err, result){
           if(err) throw err;
-          io.emit("display-posts", result); 
+          io.emit("display-posts", result);
           client.close();
         });
-         
+
       });
-      
+
 
     });
 
@@ -207,10 +207,10 @@ io.on("connection", (socket) => {
 
         db.collection('Posts').findOne({_id:ObjectId(post_ID)}, function(err, result){
           if(err) throw err;
-          console.log(result.Post_Content + " | " + result.Author); 
+          console.log(result.Post_Content + " | " + result.Author);
           client.close();
         });
-         
+
       });
     });
 
@@ -221,7 +221,7 @@ io.on("connection", (socket) => {
         var db = client.db('Pario');
         db.collection('Posts').find({Parent_Comment_ID:parent_ID}).toArray(function(err, result){
           if(err) throw err;
-          io.emit('display-comments', (result)); 
+          io.emit('display-comments', (result));
           client.close();
         });
       });
@@ -247,15 +247,15 @@ io.on("connection", (socket) => {
         var db = client.db('Pario');
         db.collection('Posts').insertOne(
             {"Post_Content": formArray[0], "Author": formArray[1], "Month": formArray[2], "Day": formArray[3], "Year": formArray[4], "Hour": formArray[5], "Minute": formArray[6], "AM_PM": formArray[7], "Comments": "", "Users_Comments": "", "Parent_Comment_ID": formArray[8]}
-        ); 
+        );
 
 
         db.collection('Posts').find({Parent_Comment_ID:formArray[8]}).toArray(function(err, result){
           if(err) throw err;
-          io.emit('display-comments', (result)); 
+          io.emit('display-comments', (result));
           client.close();
         });
-         
+
       });
     })
 });

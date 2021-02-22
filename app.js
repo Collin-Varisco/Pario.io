@@ -12,11 +12,12 @@ var express = require('express');
 //make sure you keep this order
 var app = express();
 var server = require("http").Server(app);
+
 var io = require('socket.io')(server);
 
 //...
 
-server.listen(65080);
+server.listen(5000, '45.63.66.58');
 
 var router = express.Router();
 app.set("views", "./views");
